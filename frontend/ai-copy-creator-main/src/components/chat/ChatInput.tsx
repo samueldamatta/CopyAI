@@ -141,7 +141,7 @@ const ChatInput = ({ onSend, isLoading = false, initialCopyType = "geral" }: Cha
         </div>
 
         <p className="text-xs text-muted-foreground text-center">
-          AgentCopy pode cometer erros. Sempre revise suas copys antes de usar.
+          CopyAI pode cometer erros. Sempre revise suas copys antes de usar.
         </p>
       </form>
     </div>

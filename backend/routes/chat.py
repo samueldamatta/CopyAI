@@ -11,6 +11,7 @@ from services.conversation_service import (
     update_conversation_title
 )
 from services.ai_service import generate_copy_response, get_available_models
+from services.rag_service import rag_service
 
 router = APIRouter()
 
@@ -77,7 +78,28 @@ async def send_message(
         for msg in conversation.messages
     ]
     
-    # Gera resposta da IA
+    # **RAG: Busca contexto relevante em documentos (se houver)**
+    try:
+        collection_name = f"user_{user_id}_{conversation_id}"
+        relevant_docs = await rag_service.similarity_search(
+            query=message_data.content,
+            collection_name=collection_name,
+            k=3  # Top 3 chunks mais relevantes
+        )
+        
+        # Se encontrou contexto relevante, adiciona nas mensagens
+        if relevant_docs:
+            context = rag_service.format_context_for_llm(relevant_docs)
+            # Adiciona contexto como mensagem do sistema
+            messages_for_ai.insert(0, {
+                "role": "system",
+                "content": f"Use o seguinte contexto dos documentos para responder:\n\n{context}"
+            })
+    except Exception as e:
+        print(f"⚠️ Erro ao buscar contexto RAG: {e}")
+        # Continua sem RAG se houver erro
+    
+    # Gera resposta da IA (agora com contexto RAG se disponível)
     ai_response = await generate_copy_response(messages_for_ai)
     
     # Adiciona a resposta da IA na conversa

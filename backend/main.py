@@ -4,7 +4,7 @@ from contextlib import asynccontextmanager
 
 from config import settings
 from database import connect_to_mongo, close_mongo_connection
-from routes import auth, chat, users, conversations
+from routes import auth, chat, users, conversations, documents
 
 
 @asynccontextmanager
@@ -56,6 +56,7 @@ app.include_router(auth.router, prefix="/api/auth", tags=["Autenticação"])
 app.include_router(users.router, prefix="/api/users", tags=["Usuários"])
 app.include_router(conversations.router, prefix="/api/conversations", tags=["Conversas"])
 app.include_router(chat.router, prefix="/api/chat", tags=["Chat"])
+app.include_router(documents.router, prefix="/api/documents", tags=["Documentos RAG"])
 
 
 @app.get("/")

@@ -1,0 +1,4 @@
+# Ignorar todos os arquivos nesta pasta (PDFs e ChromaDB)
+*
+!.gitignore
+

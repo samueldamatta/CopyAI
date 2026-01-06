@@ -13,3 +13,11 @@ openai==1.10.0
 httpx==0.26.0
 websockets==12.0
 
+# RAG Dependencies
+pypdf==4.0.0
+langchain==0.1.4
+langchain-openai==0.0.3
+langchain-community==0.0.13
+chromadb==0.4.22
+tiktoken==0.5.2
+

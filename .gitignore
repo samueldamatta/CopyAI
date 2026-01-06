@@ -1,0 +1,42 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+.venv/
+ENV/
+*.egg-info/
+dist/
+build/
+
+# Environment variables
+.env
+*.env
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Backend storage (PDFs e ChromaDB local)
+backend/storage/pdfs/
+backend/storage/chroma_db/
+
+# Frontend
+frontend/ai-copy-creator-main/node_modules/
+frontend/ai-copy-creator-main/dist/
+frontend/ai-copy-creator-main/.next/
+frontend/ai-copy-creator-main/build/
+
+# Logs
+*.log
+logs/
+
