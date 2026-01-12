@@ -8,7 +8,8 @@ from services.conversation_service import (
     create_conversation,
     get_conversation,
     add_message_to_conversation,
-    update_conversation_title
+    update_conversation_title,
+    update_conversation_brief
 )
 from services.ai_service import generate_copy_response, get_available_models
 from services.rag_service import rag_service
@@ -44,12 +45,17 @@ async def send_message(
     if not message_data.conversation_id:
         conversation = await create_conversation(
             user_id=user_id,
-            copy_type=message_data.copy_type
+            copy_type=message_data.copy_type,
+            brief=message_data.brief
         )
         conversation_id = str(conversation.id)
         is_first_message = True
     else:
         conversation_id = message_data.conversation_id
+        # Atualiza o brief se enviado em uma conversa existente
+        if message_data.brief:
+            await update_conversation_brief(conversation_id, user_id, message_data.brief)
+            
         conversation = await get_conversation(conversation_id, user_id)
         is_first_message = len(conversation.messages) == 0
     

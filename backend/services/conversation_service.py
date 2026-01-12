@@ -8,14 +8,20 @@ from models.conversation import ConversationModel, Message
 from services.ai_service import generate_conversation_title
 
 
-async def create_conversation(user_id: str, title: Optional[str] = None, copy_type: Optional[str] = "geral") -> ConversationModel:
+async def create_conversation(
+    user_id: str, 
+    title: Optional[str] = None, 
+    copy_type: Optional[str] = "geral",
+    brief: Optional[dict] = None
+) -> ConversationModel:
     """Cria uma nova conversa"""
     db = get_database()
     
     conversation = ConversationModel(
         user_id=user_id,
         title=title or "Nova Conversa",
-        copy_type=copy_type or "geral"
+        copy_type=copy_type or "geral",
+        brief=brief
     )
     
     conversation_dict = conversation.model_dump(by_alias=True, exclude={"id"})
@@ -77,6 +83,37 @@ async def add_message_to_conversation(
         {
             "$push": {"messages": message.model_dump()},
             "$set": {"updated_at": datetime.utcnow()}
+        },
+        return_document=True
+    )
+    
+    if not result:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Conversa não encontrada"
+        )
+    
+    return ConversationModel(**result)
+
+
+async def update_conversation_brief(
+    conversation_id: str,
+    user_id: str,
+    brief_data: dict
+) -> ConversationModel:
+    """Atualiza os dados do brief de uma conversa"""
+    db = get_database()
+    
+    result = await db.conversations.find_one_and_update(
+        {
+            "_id": ObjectId(conversation_id),
+            "user_id": user_id
+        },
+        {
+            "$set": {
+                "brief": brief_data,
+                "updated_at": datetime.utcnow()
+            }
         },
         return_document=True
     )

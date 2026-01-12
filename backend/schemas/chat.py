@@ -7,6 +7,7 @@ class MessageRequest(BaseModel):
     content: str
     conversation_id: Optional[str] = None
     copy_type: Optional[str] = "geral"
+    brief: Optional[dict] = None
 
 
 class MessageResponse(BaseModel):
@@ -26,6 +27,7 @@ class ConversationResponse(BaseModel):
     title: str
     copy_type: str
     messages: List[MessageResponse]
+    brief: Optional[dict] = None
     created_at: datetime
     updated_at: datetime
     is_archived: bool
@@ -41,4 +43,8 @@ class ConversationList(BaseModel):
     created_at: datetime
     updated_at: datetime
     message_count: int
+
+
+class ConversationUpdateBrief(BaseModel):
+    brief: dict
 

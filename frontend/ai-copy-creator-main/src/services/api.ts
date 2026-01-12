@@ -112,11 +112,12 @@ export const authService = {
 
 // Serviços de Chat
 export const chatService = {
-  sendMessage: async (content: string, conversationId?: string, copyType?: string): Promise<Message> => {
+  sendMessage: async (content: string, conversationId?: string, copyType?: string, brief?: any): Promise<Message> => {
     const response = await api.post<Message>('/chat/message', {
       content,
       conversation_id: conversationId,
       copy_type: copyType || "geral",
+      brief,
     });
     return response.data;
   },
@@ -152,6 +153,11 @@ export const conversationService = {
 
   archiveConversation: async (id: string): Promise<void> => {
     await api.post(`/conversations/${id}/archive`);
+  },
+
+  updateBrief: async (id: string, brief: any): Promise<Conversation> => {
+    const response = await api.patch<Conversation>(`/conversations/${id}/brief`, { brief });
+    return response.data;
   },
 };
 

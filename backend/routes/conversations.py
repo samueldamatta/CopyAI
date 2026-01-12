@@ -3,13 +3,14 @@ from typing import List
 
 from middleware.auth import get_current_active_user
 from models.user import UserModel
-from schemas.chat import ConversationResponse, ConversationList, ConversationCreate
+from schemas.chat import ConversationResponse, ConversationList, ConversationCreate, ConversationUpdateBrief
 from services.conversation_service import (
     create_conversation,
     get_conversation,
     get_user_conversations,
     delete_conversation,
-    archive_conversation
+    archive_conversation,
+    update_conversation_brief
 )
 
 router = APIRouter()
@@ -91,6 +92,44 @@ async def get_conversation_detail(
         title=conversation.title,
         copy_type=conversation.copy_type,
         messages=messages,
+        brief=conversation.brief,
+        created_at=conversation.created_at,
+        updated_at=conversation.updated_at,
+        is_archived=conversation.is_archived
+    )
+
+
+@router.patch("/{conversation_id}/brief", response_model=ConversationResponse)
+async def update_brief(
+    conversation_id: str,
+    brief_data: ConversationUpdateBrief,
+    current_user: UserModel = Depends(get_current_active_user)
+):
+    """Atualiza o brief de uma conversa"""
+    conversation = await update_conversation_brief(
+        conversation_id=conversation_id,
+        user_id=str(current_user.id),
+        brief_data=brief_data.brief
+    )
+    
+    # Mapear mensagens para resposta
+    from schemas.chat import MessageResponse
+    messages = [
+        MessageResponse(
+            role=msg.role,
+            content=msg.content,
+            timestamp=msg.timestamp
+        )
+        for msg in conversation.messages
+    ]
+    
+    return ConversationResponse(
+        id=str(conversation.id),
+        user_id=conversation.user_id,
+        title=conversation.title,
+        copy_type=conversation.copy_type,
+        messages=messages,
+        brief=conversation.brief,
         created_at=conversation.created_at,
         updated_at=conversation.updated_at,
         is_archived=conversation.is_archived

@@ -35,6 +35,7 @@ class ConversationModel(BaseModel):
     title: str = "Nova Conversa"
     copy_type: str = "geral"  # Tipo de copy: geral, anuncios, redes-sociais, etc.
     messages: List[Message] = Field(default_factory=list)
+    brief: Optional[dict] = None  # Dados do brief (público, dor, oferta, etc.)
     created_at: datetime = Field(default_factory=datetime.utcnow)
     updated_at: datetime = Field(default_factory=datetime.utcnow)
     is_archived: bool = False

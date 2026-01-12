@@ -69,7 +69,13 @@ const Index = () => {
     return date.toLocaleDateString("pt-BR");
   };
 
-  const handleSendMessage = async (content: string, copyType?: string) => {
+  const handleSendMessage = async (content: string, copyType?: string, briefData?: any) => {
+    // Se o conteúdo estiver vazio mas o copyType existir, apenas abre o modal no ChatInput
+    if (!content && copyType) {
+      setCurrentCopyType(copyType);
+      return;
+    }
+
     // Atualizar o tipo de copy atual
     if (copyType) {
       setCurrentCopyType(copyType);
@@ -90,11 +96,12 @@ const Index = () => {
     setIsLoading(true);
 
     try {
-      // Enviar mensagem para o backend (ChatGPT) com o tipo de copy
+      // Enviar mensagem para o backend (ChatGPT) com o tipo de copy e brief
       const response = await chatService.sendMessage(
         fullContent, 
         activeConversation || undefined,
-        copyType || currentCopyType
+        copyType || currentCopyType,
+        briefData
       );
 
       const assistantMessage: Message = {
@@ -219,9 +226,11 @@ const Index = () => {
         )}
 
         <ChatInput 
+          key={activeConversation || "new"}
           onSend={handleSendMessage} 
           isLoading={isLoading}
           initialCopyType={currentCopyType}
+          conversationId={activeConversation}
         />
       </main>
     </div>
