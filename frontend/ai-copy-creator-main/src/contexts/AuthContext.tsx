@@ -60,10 +60,6 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
       setUser(userData);
       localStorage.setItem('user', JSON.stringify(userData));
 
-      toast({
-        title: 'Login realizado com sucesso!',
-        description: `Bem-vindo(a) de volta, ${userData.username}!`,
-      });
     } catch (error: any) {
       console.error('Erro no login:', error);
       toast({

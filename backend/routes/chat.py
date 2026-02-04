@@ -26,7 +26,7 @@ async def list_available_models(
     """
     return {
         "models": get_available_models(),
-        "default": "gpt-4-turbo-preview",
+        "default": "gpt-4o",
         "info": "Use o campo 'id' para especificar o modelo nas requisições"
     }
 

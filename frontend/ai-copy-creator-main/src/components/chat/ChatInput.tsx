@@ -72,14 +72,11 @@ const ChatInput = ({ onSend, isLoading = false, initialCopyType = "geral", conve
   });
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
-  // Abrir o modal automaticamente se o componente for montado com um tipo específico (ex: via sugestão)
-  // Ou se o tipo inicial mudar via prop do componente pai (Index.tsx)
+  // Sincronizar o copyType quando a conversa mudar
   useEffect(() => {
     if (initialCopyType !== copyType) {
       setCopyType(initialCopyType);
-      if (initialCopyType !== "geral") {
-        setIsBriefModalOpen(true);
-      }
+      // Não abre o modal automaticamente ao mudar de conversa
     }
   }, [initialCopyType]);
 

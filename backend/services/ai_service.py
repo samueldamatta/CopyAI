@@ -57,7 +57,7 @@ async def generate_copy_response(
     """
     try:
         # Configurações padrão
-        model = model or "gpt-4-turbo-preview"
+        model = model or "gpt-4o"
         temperature = temperature if temperature is not None else 0.7
         max_tokens = max_tokens or 2000
         
@@ -148,9 +148,15 @@ def get_available_models() -> List[Dict[str, str]]:
     """
     return [
         {
-            "id": "gpt-4-turbo-preview",
+            "id": "gpt-4o",
+            "name": "GPT-4o (Omni)",
+            "description": "Modelo mais recente e avançado da OpenAI (recomendado)",
+            "max_tokens": 16384
+        },
+        {
+            "id": "gpt-4-turbo",
             "name": "GPT-4 Turbo",
-            "description": "Modelo mais avançado, melhor qualidade (recomendado para copys profissionais)",
+            "description": "Modelo avançado, ótima qualidade",
             "max_tokens": 4096
         },
         {
