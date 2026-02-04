@@ -41,10 +41,19 @@ const ChatSidebar = ({
   onToggle,
 }: ChatSidebarProps) => {
   const navigate = useNavigate();
-  const { logout } = useAuth();
+  const { logout, user } = useAuth();
   const [showLogoutDialog, setShowLogoutDialog] = useState(false);
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
   const [conversationToDelete, setConversationToDelete] = useState<string | null>(null);
+
+  const displayName = user?.full_name || user?.username || user?.email || "Usuário";
+  const initials = displayName
+    .trim()
+    .split(/\s+/)
+    .filter(Boolean)
+    .join(" ")
+    .slice(0, 2)
+    .toUpperCase();
 
   const handleLogoutClick = () => {
     setShowLogoutDialog(true);
@@ -145,6 +154,21 @@ const ChatSidebar = ({
 
         {/* Footer */}
         <div className="p-2 border-t border-sidebar-border space-y-1">
+          <div className="flex items-center gap-3 px-2 py-2">
+            <div
+              className="flex h-9 w-9 items-center justify-center rounded-full bg-sidebar-accent text-sidebar-accent-foreground font-semibold text-sm"
+              aria-label={`Usuário: ${displayName}`}
+              title={displayName}
+            >
+              {initials}
+            </div>
+            <div className="min-w-0 flex-1">
+              <p className="truncate text-sm font-medium leading-tight">{displayName}</p>
+              {user?.email && user?.full_name && (
+                <p className="truncate text-xs text-muted-foreground leading-tight">{user.email}</p>
+              )}
+            </div>
+          </div>
           <Button variant="sidebar" className="w-full" onClick={handleLogoutClick}>
             <LogOut className="h-4 w-4" />
             Sair
