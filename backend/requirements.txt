@@ -9,9 +9,12 @@ passlib[bcrypt]==1.7.4
 bcrypt==4.0.1
 python-multipart==0.0.6
 python-dotenv==1.0.0
-openai==1.10.0
 httpx==0.26.0
 websockets==12.0
+
+# OpenAI Agents SDK (brings in compatible openai client as dependency)
+openai-agents>=0.0.7
+eval-type-backport  # required for Python 3.9 compatibility with openai-agents
 
 # RAG Dependencies
 pypdf==4.0.0
@@ -20,4 +23,3 @@ langchain-openai==0.0.3
 langchain-community==0.0.13
 chromadb==0.4.22
 tiktoken==0.5.2
-
