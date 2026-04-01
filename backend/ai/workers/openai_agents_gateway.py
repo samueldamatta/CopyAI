@@ -3,11 +3,7 @@ from typing import Dict, List, Optional
 from agents import Agent, Runner
 
 from domain.gateways.ai_gateway import AIGateway
-from ai.agents.agent_definitions import (
-    COPYWRITER_INSTRUCTIONS,
-    make_copywriter_agent,
-    make_title_agent,
-)
+from ai.agents.agent_definitions import make_copywriter_agent, make_title_agent
 
 _AVAILABLE_MODELS = [
     {
@@ -50,11 +46,7 @@ class OpenAIAgentsGateway(AIGateway):
         try:
             agent = self._default_agent
             if model and model != "gpt-4o":
-                agent = Agent(
-                    name="Copywriter",
-                    instructions=COPYWRITER_INSTRUCTIONS,
-                    model=model,
-                )
+                agent = make_copywriter_agent(model=model)
             result = await Runner.run(agent, input=messages)
             return result.final_output
         except Exception as e:
